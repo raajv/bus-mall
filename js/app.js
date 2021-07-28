@@ -10,15 +10,19 @@ let product2ImgEl=document.getElementById('product2');
 let product2H2El=document.getElementById('product2h2');
 let product3ImgEl=document.getElementById('product3');
 let product3H2El=document.getElementById('product3h2');
+let ulEl=document.getElementById('result');
+let createChartEl=document.getElementById('chartButton');
+let clickCounter=0;
 
-let product1 ;
-let product2 ;
-let product3 ;
+let product1;
+let product2;
+let product3;
 //-------------------------------------object constructor------------------------------------------//
-function Product(name,imgPath,counter){
+function Product(name,imgPath,votes,views){
   this.name = name;
   this.imgPath=imgPath;
-  this.counter=counter;
+  this.votes=votes;
+  this.views=views;
 
   Product.allProducts.push(this);
 }
@@ -40,9 +44,14 @@ function getThreeProducts() {
   product2 = Product.allProducts[productTwo];
   let productThree = Math.floor(Math.random() * Product.allProducts.length);
   product3 = Product.allProducts[productThree];
+  
   while (product2 === null || product2 === product1 || product2===product3) {
     let productTwo = Math.floor(Math.random() * Product.allProducts.length);
     product2 = Product.allProducts[productTwo];
+  }
+  while (product3 === null || product3 === product1 || product3===product2) {
+    let productThree = Math.floor(Math.random() * Product.allProducts.length);
+    product3 = Product.allProducts[productThree];
   }
 }
 function renderProducts(){
@@ -51,68 +60,77 @@ function renderProducts(){
   product3.renderProduct(product3H2El,product3ImgEl);
 }
 
-// function renderResults() {
-//   ulElem.textContent = '';
+function renderResults() {
+  for (let product of Product.allProducts) {
+    
+    let liEl = document.createElement('li');
+    liEl.textContent = `${product.name}: ${product.votes}`;
+    ulEl.appendChild(liEl);
+  }}
 
-  // for (let goat of Goat.allGoats) {
-  //   let liElem = document.createElement('li');
-  //   liElem.textContent = `${goat.name}: ${goat.votes}`;
-  //   ulElem.appendChild(liElem)
-  // }
 
-  // for (let i = 0; i < Goat.allGoats.length; i++) {
-  //   let goat = Goat.allGoats[i];
-  //   let liElem = document.createElement('li');
-  //   liElem.textContent = `${goat.name}: ${goat.votes}`;
-  //   ulElem.appendChild(liElem)
-  // }
-// }
 
 function handleClick(e) {
-  alert(e.target.id);}
-  // let imageClicked = e.target.id;
-  // if (imageClicked === 'right_goat_img' || imageClicked === 'left_goat_img') {
-  //   clickCounter++;
-  //   if (imageClicked === 'right_goat_img') {
-  //     rightGoat.votes++;
-  //     console.log(rightGoat)
-  //   }
-  //   if (imageClicked === 'left_goat_img') {
-  //     leftGoat.votes++;
-  //     console.log(leftGoat);
-  //   }
-  //   getTwoGoats();
-  //   renderTheGoats();
-  // }
-//   if (clickCounter === 10) {
-//     // alert('show the goat totals');
-//     renderResults();
-//     voteSectionElem.removeEventListener('click', handleClick);
-//   }
+  // alert(e.target.id);}
+  let imageClicked = e.target.id;
+  if (imageClicked === 'product1' || imageClicked === 'product2' || imageClicked==='product3') {
+    clickCounter++;
+    if (imageClicked === 'product1') {
+      product1.votes++;
+      product1.views++;
+      console.log(product1);
+    }
+    if (imageClicked === 'product2') {
+      product2.votes++;
+      product2.views++;
+      console.log(product2);
+    }
+    if (imageClicked === 'product3') {
+      product3.votes++;
+      product3.views++;
+      console.log(product3);
+    }
+    getThreeProducts() ;
+    renderProducts(); }
 
-// }
+if (clickCounter === 25) {
+  alert('show totals');
+    renderResults();
+    // voteSectionElem.removeEventListener('click', handleClick);
+  }
+
+}
+function handleChart(e){
+  let buttonClicked=e.target.id;
+  if (buttonClicked){
+
+  }
+}
 
 productVoteEl.addEventListener('click',handleClick);
+createChartEl.addEventListener('click',handleChart);
 //-------------------------------------Function called------------------------------------------//
-new Product('bag', './img/bag.jpg');
-new Product('banana', './img/banana.jpg');
-new Product('bathroom', './img/bathroom.jpg');
-new Product('boots', './img/boots.jpg');
-new Product('breakfast', './img/breakfast.jpg');
-new Product('bubblegum', './img/bubblegum.jpg');
-new Product('chair', './img/chair.jpg');
-new Product('cthulhu', './img/cthulhu.jpg');
-new Product('dog-duck', './img/dog-duck.jpg');
-new Product('pen', './img/dog-duck.jpg');
-new Product('pet-sweep', './img/dog-duck.jpg');
-new Product('scissors', './img/dog-duck.jpg');
-new Product('shark', './img/dog-duck.jpg');
-new Product('sweep', './img/dog-duck.jpg');
-new Product('tauntaun', './img/dog-duck.jpg');
-new Product('unicorn', './img/dog-duck.jpg');
-new Product('dragon', './img/dragon.jpg');
-new Product('water can', './img/water-can.jpg');
-new Product('wine glass', './img/wine-glass.jpg');
-new Product('dog-duck', './img/dog-duck.jpg');
+new Product('bag', './img/bag.jpg',0,0);
+new Product('banana', './img/banana.jpg',0,0);
+new Product('bathroom', './img/bathroom.jpg',0,0);
+new Product('boots', './img/boots.jpg',0,0);
+new Product('breakfast', './img/breakfast.jpg',0,0);
+new Product('bubblegum', './img/bubblegum.jpg',0,0);
+new Product('chair', './img/chair.jpg',0,0);
+new Product('cthulhu', './img/cthulhu.jpg',0,0);
+new Product('dog-duck', './img/dog-duck.jpg',0,0);
+new Product('pen', './img/pen.jpg',0,0);
+new Product('pet-sweep', './img/pet-sweep.jpg',0,0);
+new Product('scissors', './img/scissors.jpg',0,0);
+new Product('shark', './img/shark.jpg',0,0);
+new Product('sweep', './img/sweep.png',0,0);
+new Product('tauntaun', './img/tauntaun.jpg',0,0);
+new Product('unicorn', './img/unicorn.jpg',0,0);
+new Product('dragon', './img/dragon.jpg',0,0);
+new Product('water can', './img/water-can.jpg',0,0);
+new Product('wine glass', './img/wine-glass.jpg',0,0);
+
 getThreeProducts() ;
 renderProducts();
+
+//-----------------------------------------------------CHART----------------------------//
