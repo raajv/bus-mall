@@ -27,6 +27,7 @@ function Product(name,imgPath,votes,views){
   Product.allProducts.push(this);
 }
 Product.allProducts = [];
+console.log(Product.allProducts);
 //-------------------------------------Prototype------------------------------------------//
 Product.prototype.renderProduct = function(h2,imgPath){
   h2.textContent = this.name ;
@@ -53,7 +54,11 @@ function getThreeProducts() {
     let productThree = Math.floor(Math.random() * Product.allProducts.length);
     product3 = Product.allProducts[productThree];
   }
+  product1.views++;
+  product2.views++;
+  product3.views++;
 }
+
 function renderProducts(){
   product1.renderProduct(product1H2El,product1ImgEl);
   product2.renderProduct(product2H2El,product2ImgEl);
@@ -61,10 +66,9 @@ function renderProducts(){
 }
 
 function renderResults() {
-  for (let product of Product.allProducts) {
-    
+  for (let i=0;i<19;i++) {
     let liEl = document.createElement('li');
-    liEl.textContent = `${product.name}: ${product.votes}`;
+    liEl.textContent = `${Product.allProducts[i].name}: ${Product.allProducts[i].views}`;
     ulEl.appendChild(liEl);
   }}
 
@@ -77,31 +81,28 @@ function handleClick(e) {
     clickCounter++;
     if (imageClicked === 'product1') {
       product1.votes++;
-      product1.views++;
       console.log(product1);
     }
     if (imageClicked === 'product2') {
       product2.votes++;
-      product2.views++;
       console.log(product2);
     }
     if (imageClicked === 'product3') {
       product3.votes++;
-      product3.views++;
       console.log(product3);
     }
     getThreeProducts() ;
     renderProducts(); }
 
-if (clickCounter === 25) {
-  alert('show totals');
+  if (clickCounter === 25) {
+    alert('click on the button to view historical data');
     renderResults();
-    // voteSectionElem.removeEventListener('click', handleClick);
+    putProductInStorage();
+    productVoteEl.removeEventListener('click',handleClick);
   }
 
 }
 
- 
 
 productVoteEl.addEventListener('click',handleClick);
 createChartEl.addEventListener('click',handleChart);
@@ -129,22 +130,46 @@ new Product('wine glass', './img/wine-glass.jpg',0,0);
 getThreeProducts() ;
 renderProducts();
 
+
+function putProductInStorage() {
+  // prepare the data to be stored
+  
+  let stringifiedArray = JSON.stringify(Product.allProducts);
+  // console.log(stringifiedArray);
+  // store the data in storage with the key coffee
+  localStorage.setItem('product', stringifiedArray);
+}
+function getProductFromStorage(){
+  let productInStorage =localStorage.getItem('product');
+  if(productInStorage){
+    let parsedProduct = JSON.parse(productInStorage);
+    console.log(parsedProduct);
+    for(let product of parsedProduct){
+      let newProduct = new Product(product.name,product.imgPath,product.votes,product.views);
+      Product.allProducts.push(newProduct);
+      console.log(Product.allProducts)
+    }
+  }
+}
 //-----------------------------------------------------CHART----------------------------//
+
+
+
 function handleChart(e){
   let buttonClicked=e.target.id;
   if (buttonClicked){
-let ctx = document.getElementById('myChart').getContext('2d');
-let nameArray=[];
-let voteArray=[];
-let viewsArray=[];
-for (let product of Product.allProducts){
-  nameArray.push(product.name);
-  voteArray.push(product.votes);
-  viewsArray.push(product.views);
-};
-console.log(nameArray);
-console.log(viewsArray);
-console.log(voteArray);
+    let ctx = document.getElementById('myChart').getContext('2d');
+    let nameArray=[];
+    let voteArray=[];
+    let viewsArray=[];
+    for (let product of Product.allProducts){ 
+      nameArray.push(product.name);
+      voteArray.push(product.votes);
+      viewsArray.push(product.views);
+    };
+    
+    
+
 let myChart = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -152,8 +177,6 @@ let myChart = new Chart(ctx, {
         datasets: [{
             label: '# of Votes',
             data: voteArray,
-            label: '# of views',
-            data : viewsArray,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -171,6 +194,17 @@ let myChart = new Chart(ctx, {
                 'rgba(255, 159, 64, 1)'
             ],
             borderWidth: 1
+        },{
+        
+            label: '# of Views',
+            data: viewsArray,
+            backgroundColor: [
+                'pink',
+            ],
+            borderColor: [
+                'blue',
+            ],
+            borderWidth: 1
         }]
     },
     options: {
@@ -183,3 +217,5 @@ let myChart = new Chart(ctx, {
 });
 }
 }
+
+getProductFromStorage();
