@@ -72,7 +72,7 @@ function renderResults() {
     ulEl.appendChild(liEl);
   }}
 
-
+  getProductFromStorage();
 
 function handleClick(e) {
   // alert(e.target.id);}
@@ -95,7 +95,7 @@ function handleClick(e) {
     renderProducts(); }
 
   if (clickCounter === 25) {
-    alert('click on the button to view historical data');
+    alert('Click on the button to view historical data');
     renderResults();
     putProductInStorage();
     productVoteEl.removeEventListener('click',handleClick);
@@ -166,56 +166,55 @@ function handleChart(e){
       nameArray.push(product.name);
       voteArray.push(product.votes);
       viewsArray.push(product.views);
-    };
+    }
     
     
 
 let myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
+      type: 'bar',
+      data: {
         labels: nameArray,
         datasets: [{
-            label: '# of Votes',
-            data: voteArray,
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
+          label: '# of Votes',
+          data: voteArray,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
         },{
         
-            label: '# of Views',
-            data: viewsArray,
-            backgroundColor: [
-                'pink',
-            ],
-            borderColor: [
-                'blue',
-            ],
-            borderWidth: 1
+          label: '# of Views',
+          data: viewsArray,
+          backgroundColor: [
+            'pink',
+          ],
+          borderColor: [
+            'blue',
+          ],
+          borderWidth: 1
         }]
-    },
-    options: {
+      },
+      options: {
         scales: {
-            y: {
-                beginAtZero: true
-            }
+          y: {
+            beginAtZero: true
+          }
         }
-    }
-});
-}
+      }
+    });
+  }
 }
 
-getProductFromStorage();
